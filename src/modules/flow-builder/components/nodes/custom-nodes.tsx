@@ -1,8 +1,8 @@
 import { Box, HStack, Popover, PopoverBody, PopoverContent, PopoverTrigger, Text, VStack } from "@chakra-ui/react";
-import { Handle, Position } from "@xyflow/react";
+import { Handle, type Node, type NodeProps, Position } from "@xyflow/react";
 import { useEffect, useState } from "react";
 
-import { type ChannelKey, type Data, channels } from "../mainComponent/main-component-reducer";
+import { type ChannelKey, type Data, channels } from "@/components/mainComponent/main-component-reducer";
 
 export function StartNode({ isConnectable }: any) {
     return (
@@ -29,48 +29,27 @@ export function EndNode({ isConnectable }: any) {
             <Box className="i-mynaui:square css-0 size-4.5" />
             <Text>End</Text>
             <Handle
-                type="source"
+                type="target"
                 position={Position.Left}
-                id="a"
+                id="b"
                 isConnectable={isConnectable}
             />
         </HStack>
     );
 };
 
-// type ChannelKey = "SMS" | "WhatsApp" | "Messenger" | "Telegram";
+type TextMessageNodeProps = NodeProps<Node<Data, "mainNode">>;
 
-// const channels = {
-//     SMS: {
-//         name: "SMS",
-//         icon: "i-ic:round-sms",
-//     },
-//     WhatsApp: {
-//         name: "WhatsApp",
-//         icon: "i-ic:round-whatsapp",
-//     },
-//     Messenger: {
-//         name: "Messenger",
-//         icon: "i-mingcute:messenger-line",
-//     },
-//     Telegram: {
-//         name: "Telegram",
-//         icon: "i-ic:round-telegram",
-//     },
-// };
-
-const message = " Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-
-interface MainNodeProps {
-    isConnectable: boolean;
-    data: Data;
-}
-
-export function MainNode({ isConnectable, data }: MainNodeProps) {
+export function MainNode({ id, isConnectable, data }: TextMessageNodeProps) {
     const [selectedChannel, setSelectedChannel] = useState<ChannelKey>();
     useEffect(() => {
         setSelectedChannel(data.socialMedia);
     }, [data.socialMedia]);
+
+    const handleOnEdit = () => {
+        console.log("data ", data);
+    };
+
     return (
 
         <VStack gap={0} className="w-xs rounded-lg bg-dark-300/50 text-light divide-y divide-dark-200">
@@ -116,7 +95,7 @@ export function MainNode({ isConnectable, data }: MainNodeProps) {
                         </PopoverContent>
                     </Popover>
                     <Box className="mx-1 h-4 w-px bg-dark-100" />
-                    <Box className="size-7 flex cursor-pointer items-center justify-center rounded-lg hover:bg-dark-100">
+                    <Box onClick={handleOnEdit} className="size-7 flex cursor-pointer items-center justify-center rounded-lg hover:bg-dark-100">
                         <Box className="i-mynaui:cog size-4" />
                     </Box>
                     <Box className="size-7 flex cursor-pointer items-center justify-center rounded-lg hover:bg-dark-100">
@@ -129,7 +108,7 @@ export function MainNode({ isConnectable, data }: MainNodeProps) {
             <VStack gap={0} alignItems="flex-start" className="w-full px-4 py-2">
                 <Text className="text-xs text-light-900/50 font-medium">Message Content</Text>
                 <Box className="line-clamp-4 mt-2 text-sm leading-snug">
-                    {message
+                    {data.message
                         ? (
                             <Text>{data.message}</Text>
                             )
@@ -141,18 +120,22 @@ export function MainNode({ isConnectable, data }: MainNodeProps) {
             <HStack alignItems="flex-start" gap={0} className="w-full px-4 py-2">
                 <Text className="text-xs text-light-900/50">
                     This message will be sent to the user using the
-                    <Text className="w-auto">{` ${data.socialMedia} `}</Text>
-                    channel.
+                    <Text className="w-auto">
+                        {` ${data.socialMedia.name}`}
+                        {" "}
+                        channel.
+                    </Text>
+
                 </Text>
             </HStack>
             <HStack gap={0} className="w-full bg-dark-300/30 px-4 py-2">
                 <Text className="text-xs text-light-900/50">Node: </Text>
-                <Text className="ml-1 text-xs text-light-900/60 font-semibold"> NgsTsjFajBlobG2sm-Tke</Text>
+                <Text className="ml-1 text-xs text-light-900/60 font-semibold">{id}</Text>
             </HStack>
             <Handle
-                type="target"
+                type="source"
                 position={Position.Right}
-                id="wudhd"
+                id="sjdhbfjhsd"
                 isConnectable={isConnectable}
             />
         </VStack>

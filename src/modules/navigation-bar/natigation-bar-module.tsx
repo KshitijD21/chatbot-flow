@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
 
-export default function Header() {
+export default function NavigationModule() {
     return (
         <HStack height="52px" backgroundColor="brand.500" padding="8px 6px" justifyContent="space-between">
             <HStack paddingLeft=".5rem">

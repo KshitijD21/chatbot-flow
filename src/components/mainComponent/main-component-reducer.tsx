@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useReducer } from "react";
+import { useMemo, useReducer, useState } from "react";
 
 export enum MainReducerTypes {
     SET_VIEW_MODE = "SET_VIEW_MODE",
@@ -9,8 +9,8 @@ export enum MainReducerTypes {
 }
 
 export enum ViewModeOptions {
-    Group = "Group",
-    Grid = "Grid",
+    AvailableNodes = "available-nodes",
+    NodeProperties = "node-properties",
 }
 
 export interface ChannelKey {
@@ -46,7 +46,7 @@ interface Position {
     y: number;
 }
 
-export interface Data {
+export interface Data extends Record<string, any> {
     socialMedia: ChannelKey;
     message: string;
 }
@@ -63,10 +63,15 @@ interface AddNodeAction {
     payload: NodeValue;
 };
 
-type Action = SetViewModeAction | AddNodeAction;
+interface UpdateNodeAction {
+    type: MainReducerTypes.UPDATE_NODE;
+    payload: NodeValue;
+};
+
+type Action = SetViewModeAction | AddNodeAction | UpdateNodeAction;
 
 export const initialState = {
-    viewMode: ViewModeOptions.Group,
+    viewMode: ViewModeOptions.AvailableNodes,
     nodeValue: [
         {
             id: "default_node",
@@ -84,8 +89,14 @@ export function mainReducer(state: typeof initialState, action: Action) {
     switch (action.type) {
         case MainReducerTypes.SET_VIEW_MODE:
             return { ...state, viewMode: action.payload };
-        case MainReducerTypes.ADD_NODE:
-            return { ...state, nodeValue: [...state.nodeValue, action.payload] };
+        // case MainReducerTypes.ADD_NODE:
+        //     return { ...state, nodeValue: [...state.nodeValue, action.payload] };
+        // case MainReducerTypes.UPDATE_NODE: {
+        //     const updatedNodeValue = state.nodeValue.map(node =>
+        //         node.id === action.payload.id ? { ...node, ...action.payload } : node,
+        //     );
+        //     return { ...state, nodeValue: updatedNodeValue };
+        // }
         default:
             throw new Error(`Unknown action type`);
     }
@@ -93,7 +104,6 @@ export function mainReducer(state: typeof initialState, action: Action) {
 
 export function useProductReducer() {
     const [state, dispatch] = useReducer(mainReducer, initialState);
-
     const actions = useMemo(() => ({
         setViewMode: (viewMode: ViewModeOptions) => {
             dispatch({
@@ -101,12 +111,21 @@ export function useProductReducer() {
                 payload: viewMode,
             });
         },
-        setNewNode: (nodeValue: { id: string; data: Data; type: string; position: Position }) => {
-            dispatch({
-                type: MainReducerTypes.ADD_NODE,
-                payload: nodeValue,
-            });
-        },
+        // setNewNode: (nodeValue: { id: string; data: Data; type: string; position: Position }) => {
+        //     dispatch({
+        //         type: MainReducerTypes.ADD_NODE,
+        //         payload: nodeValue,
+        //     });
+        // },
+        // setUpdatedNode: (nodeValue: { id: string; data: Data; type: string; position: Position }) => {
+        //     console.log("updated node value ", nodeValue);
+
+        //     dispatch({
+        //         type: MainReducerTypes.UPDATE_NODE,
+        //         payload: nodeValue,
+        //     });
+        // },
+
     }), [dispatch]);
 
     return {

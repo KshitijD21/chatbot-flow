@@ -1,14 +1,12 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
+import { useReactFlow } from "@xyflow/react";
 import { v4 as uuidv4 } from "uuid";
 
-import { channels, type initialState } from "./mainComponent/main-component-reducer";
+import { channels } from "@/components/mainComponent/main-component-reducer";
 
-interface DefaultNodeProps {
-    state: typeof initialState;
-    actions: any;
-}
+export default function AvailableNodePanel() {
+    const { addNodes } = useReactFlow();
 
-export default function DefaultNode({ state, actions }: DefaultNodeProps) {
     function handleClick() {
         const nodeValue = {
             id: uuidv4(),
@@ -19,7 +17,9 @@ export default function DefaultNode({ state, actions }: DefaultNodeProps) {
             },
             position: { x: 200, y: 300 },
         };
-        actions.setNewNode(nodeValue);
+        console.log(nodeValue);
+
+        addNodes(nodeValue);
     }
     return (
         <VStack>
