@@ -36,7 +36,6 @@ function ChakraSyncedThemeProvider({ children }: { children: ReactNode }) {
     return (
         <ChakraProvider theme={theme} colorModeManager={createLocalStorageManager("theme")}>
             <ChakraColorModeSync />
-
             {children}
         </ChakraProvider>
     );

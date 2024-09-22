@@ -10,6 +10,8 @@ import { Provider } from "./provider";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import ApplicationStateProvider from "@/stores/application-state";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -35,10 +37,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <body className={inter.className}>
                 <Provider>
                     <ReactFlowProvider>
-
-                        <Box bg="brand.background" minHeight="100vh">
-                            {children}
-                        </Box>
+                        <ApplicationStateProvider>
+                            <Box bg="brand.background" minHeight="100vh">
+                                {children}
+                            </Box>
+                        </ApplicationStateProvider>
                     </ReactFlowProvider>
                 </Provider>
             </body>
