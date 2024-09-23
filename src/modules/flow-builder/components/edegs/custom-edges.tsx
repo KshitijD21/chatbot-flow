@@ -15,12 +15,13 @@ export default function CustomEdge({ id, sourceX, sourceY, targetX, targetY }: a
             <BaseEdge id={id} path={edgePath} />
             <EdgeLabelRenderer>
                 <Box
+                    cursor="pointer"
                     style={{
                         position: "absolute",
                         transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
                         pointerEvents: "all",
                     }}
-                    className="nodrag nopan size-8 rounded-full bg-dark-500 color-red-4 hover:bg-dark-300"
+                    className="nodrag nopan size-7 rounded-full bg-dark-500 color-red-4 hover:bg-dark-300"
                     onClick={() => {
                         setEdges(es => es.filter(e => e.id !== id));
                     }}

@@ -5,13 +5,13 @@ import type { initialState } from "@/components/mainComponent/main-component-red
 import { ViewModeOptions } from "@/components/mainComponent/main-component-reducer";
 import { useApplicationState } from "@/stores/application-state";
 
-interface SideBarProps {
-    state: typeof initialState;
-    actions: any;
-}
+// interface SideBarProps {
+//     state: typeof initialState;
+//     actions: any;
+// }
 
 export default function SideBarButtonItem(
-    { state, actions }: SideBarProps,
+
 ) {
     const { viewMode, setViewMode } = useApplicationState();
 

@@ -13,7 +13,7 @@ export default antfu({
     },
     rules: {
         "style/array-bracket-newline": ["error", { multiline: true }],
-        // "style/function-call-argument-newline": ["error", "consistent"],
+        "style/function-call-argument-newline": ["error", "consistent"],
         "style/brace-style": ["error", "1tbs", { allowSingleLine: true }],
         "style/max-statements-per-line": ["error", { max: 2 }],
         "style/jsx-self-closing-comp": [

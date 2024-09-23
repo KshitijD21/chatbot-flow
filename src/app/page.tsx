@@ -8,7 +8,7 @@ import NavigationModule from "@/modules/navigation-bar/natigation-bar-module";
 import SideBarModule from "@/modules/sidebar/sidebar-module";
 
 export default function RootPage() {
-    const { state, actions } = useProductReducer();
+    // const { state, actions } = useProductReducer();
 
     return (
         <ReactFlowProvider>
@@ -20,7 +20,7 @@ export default function RootPage() {
                             <FlowBuilderModule />
                         </Box>
                     </Box>
-                    <SideBarModule state={state} actions={actions} />
+                    <SideBarModule />
                 </HStack>
             </Box>
         </ReactFlowProvider>

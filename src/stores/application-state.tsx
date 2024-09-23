@@ -5,9 +5,12 @@ import { ViewModeOptions } from "@/components/mainComponent/main-component-reduc
 
 function useApplicationStateProvider() {
     const [viewMode, setViewMode] = useState(ViewModeOptions.AvailableNodes);
+    const [selectedNodeId, setSelectedNodeId] = useState("default_node");
     return {
         viewMode,
         setViewMode,
+        selectedNodeId,
+        setSelectedNodeId,
     };
 }
 

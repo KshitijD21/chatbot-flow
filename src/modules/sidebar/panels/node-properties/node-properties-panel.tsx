@@ -1,17 +1,16 @@
 "use client";
 import { Box, HStack, Input, Popover, PopoverBody, PopoverContent, PopoverTrigger, Text, Textarea, VStack } from "@chakra-ui/react";
-import { type Node, type NodeProps, useNodesData, useReactFlow } from "@xyflow/react";
-import { useState } from "react";
+import { useReactFlow } from "@xyflow/react";
 
-import { type Data, channels } from "@/components/mainComponent/main-component-reducer";
+import { channels } from "@/components/mainComponent/main-component-reducer";
+import { useSelectedNode } from "@/modules/flow-builder/hooks/use-selected-node";
+import { useApplicationState } from "@/stores/application-state";
 
 export default function NodePropertiesPanel() {
     const { getNodes, updateNodeData } = useReactFlow();
 
-    const [selectedNodeId, setSelectedNodeId] = useState<string>("default_node");
-    const nodes = useNodesData<Node<Data>>(selectedNodeId);
-
-    const selectedNode = nodes;
+    const { selectedNodeId, setSelectedNodeId } = useApplicationState();
+    const { selectedNode } = useSelectedNode(selectedNodeId);
 
     const middleNodes = getNodes().filter(node => node.id !== "start-node" && node.id !== "end-node");
 
@@ -22,7 +21,7 @@ export default function NodePropertiesPanel() {
                     <Box className="i-mynaui:layers-three size-4.5" />
                     <Text>Nodes in Flow</Text>
                 </HStack>
-                <VStack className="w-full gap-1 px-4">
+                <VStack overflow-y="scroll" className="w-full gap-1 px-4">
                     <HStack className="w-full cursor-pointer rounded-lg p-2 hover:bg-dark-300">
                         <Box className="i-mynaui:play size-4.5 scale-135" />
                         <Text>start</Text>
@@ -116,7 +115,6 @@ export default function NodePropertiesPanel() {
                                         ...selectedNode.data,
                                         message: e.target.value,
                                     };
-
                                     updateNodeData(selectedNode?.id, updatedData);
                                 }}
                                 placeholder="Type your message here..."

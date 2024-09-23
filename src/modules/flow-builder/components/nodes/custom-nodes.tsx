@@ -1,8 +1,11 @@
 import { Box, HStack, Popover, PopoverBody, PopoverContent, PopoverTrigger, Text, VStack } from "@chakra-ui/react";
-import { Handle, type Node, type NodeProps, Position } from "@xyflow/react";
-import { useEffect, useState } from "react";
+import { Handle, type Node, type NodeProps, Position, useReactFlow } from "@xyflow/react";
+import { useCallback } from "react";
 
-import { type ChannelKey, type Data, channels } from "@/components/mainComponent/main-component-reducer";
+import { useSelectedNode } from "../../hooks/use-selected-node";
+
+import { type ChannelKey, type Data, ViewModeOptions, channels } from "@/components/mainComponent/main-component-reducer";
+import { useApplicationState } from "@/stores/application-state";
 
 export function StartNode({ isConnectable }: any) {
     return (
@@ -41,18 +44,27 @@ export function EndNode({ isConnectable }: any) {
 type TextMessageNodeProps = NodeProps<Node<Data, "mainNode">>;
 
 export function MainNode({ id, isConnectable, data }: TextMessageNodeProps) {
-    const [selectedChannel, setSelectedChannel] = useState<ChannelKey>();
-    useEffect(() => {
-        setSelectedChannel(data.socialMedia);
-    }, [data.socialMedia]);
+    const { selectedNodeId, setSelectedNodeId, setViewMode } = useApplicationState();
+    const { updateNodeData } = useReactFlow();
 
-    const handleOnEdit = () => {
-        console.log("data ", data);
+    const { selectedNode } = useSelectedNode(selectedNodeId);
+
+    const handleOnEdit = useCallback(() => {
+        setSelectedNodeId(id);
+        setViewMode(ViewModeOptions.NodeProperties);
+    }, [id, setSelectedNodeId, setViewMode]);
+
+    const handleUpdateNode = (id: string, channel: ChannelKey) => {
+        const updatedData = {
+            ...selectedNode,
+            socialMedia: channel,
+        };
+        updateNodeData(id, updatedData);
     };
 
     return (
 
-        <VStack gap={0} className="w-xs rounded-lg bg-dark-300/50 text-light divide-y divide-dark-200">
+        <VStack onDoubleClick={handleOnEdit} gap={0} className="w-xs rounded-lg bg-dark-300/50 text-light divide-y divide-dark-200">
             <Handle
                 type="target"
                 position={Position.Left}
@@ -69,7 +81,7 @@ export function MainNode({ id, isConnectable, data }: TextMessageNodeProps) {
                         <PopoverTrigger>
                             <HStack gap="0" className="h-8 w-auto flex cursor-pointer items-center justify-between border border-dark-200 rounded-lg bg-dark-400 p-2 hover:bg-dark-200">
                                 <HStack>
-                                    <Box className={`${selectedChannel?.icon} size-4`} />
+                                    <Box className={`${data.socialMedia.icon} size-4`} />
                                 </HStack>
                                 <Box className="i-lucide:chevrons-up-down ml-1 size-3 op-50" />
                             </HStack>
@@ -83,7 +95,7 @@ export function MainNode({ id, isConnectable, data }: TextMessageNodeProps) {
                                             <HStack
                                                 key={key}
                                                 className="w-full cursor-pointer rounded-lg p-2 hover:bg-dark-300"
-                                                onClick={() => setSelectedChannel(channel)}
+                                                onClick={() => handleUpdateNode(id, channel)}
                                             >
                                                 <Box className={`${channel.icon} size-4`} />
                                                 <Text className="text-xs">{channel.name}</Text>
